@@ -1,17 +1,17 @@
 {
-  "name": "backend",
+  "name": "Backend",
   "version": "1.0.0",
-  "description": "Testre de projeto node",
+  "description": "Backend",
   "main": "index.js",
-  "author": "leonardo Jorge",
+  "author": "Leonardo Jorge",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.js"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "5.12.1",
+    "mongoose": "^5.12.5",
     "nodemon": "^2.0.7"
   }
 }
