@@ -10,4 +10,4 @@ const EspecialidadeSchema = new mongoose.Schema({
     status : Boolean
 });
 
-module.exports = mongoose.model('Especialidade', EspecialidadeSchema);
+module.exports = mongoose.model('especialidades', EspecialidadeSchema);

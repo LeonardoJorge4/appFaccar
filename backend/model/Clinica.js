@@ -10,5 +10,5 @@ const ClinicaSchema = new mongoose.Schema({
     status : Boolean
 });
 
-module.exports = mongoose.model('Clinica', ClinicaSchema);
+module.exports = mongoose.model('clinicas', ClinicaSchema);
 

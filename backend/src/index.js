@@ -5,11 +5,25 @@ const routes = require('./routes');
 const app = express(); //instanciando express (gerenciador de rotas)
 const cors = require('cors');
 
-mongoose.connect('mongodb+srv://omnistack:leo44317@principal.t0fi8.mongodb.net/AppFaccar?retryWrites=true&w=majority',
+// mongoose.connect('mongodb+srv://leooz8:leo44317@appfaccar.ypvzu.mongodb.net/AppFaccar?retryWrites=true&w=majority',
+// {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+// }); //conectando ao mongo DB
+
+
+mongoose.connect('mongodb+srv://leooz8:leo44317@appfaccar.ypvzu.mongodb.net/AppFaccar?retryWrites=true&w=majority',
 {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}); //conectando ao mongo DB
+})
+.then(function(){
+    console.log("Banco de dados conectado com sucesso...");
+}).catch(function(err){
+    console.log('Erro ao conectar com o banco de dados: ' + err);
+})
+
+
 
 app.use(cors())
 app.use(express.json());

@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from 'react'
-import {View, Text, Image, StatusBar, StyleSheet} from 'react-native'
+import { View, Text, Image, StyleSheet, FlatList } from 'react-native'
+import ListItem from "../components/ListItem";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon } from 'react-native-elements';
 
 import avatar from "../../assets/avatar.jpeg";
+import api from '../service/api';
 
-
-export default function Index({navigation}) {
+export default function Index({ navigation }) {
 
   const [user, setUser] = useState('');
+  const [materias, setMaterias] = useState('');
+
+  async function listaMaterias() {
+    const materias = await api.get('/materia');
+    if(materias.status == 200) {
+      setMaterias(materias.data);
+    } else {
+      let msgError = response.data;
+      console.log(msgError.mensagem);
+    }
+  }
 
   useEffect(() => {
+    if(!materias) {
+      listaMaterias()
+    }
     AsyncStorage.getItem('@user').then(user => {
       user = JSON.parse(user);
       if(!user) {
@@ -20,6 +35,18 @@ export default function Index({navigation}) {
       }
     })
   })
+
+  function notas(materiaid) {
+    navigation.navigate('MateriaNotas', {
+      materia: materiaid
+    });
+  }
+
+  function faltas(materiaid) {
+    navigation.navigate('MateriaFaltas', {
+      materia: materiaid
+    });
+  }
 
   function logoff() {
     AsyncStorage.removeItem('@user');
@@ -37,9 +64,9 @@ export default function Index({navigation}) {
           <Image source={avatar} style={[styles.avatar]}></Image>
         </View>
         <View>
-          <Text style={styles.Name}>{user.name}</Text>
+          <Text style={styles.name}>Leonardo Conrrado Jorge</Text>
           <Text style={styles.text}>Matrícula: {user.ra}</Text>
-          <Text style={styles.text}>{user.email}</Text>
+          <Text style={styles.text}>leonardo3849@edu.faccar.com.br</Text>
         </View>
         <View style={styles.areaLogout}>
           <Icon onPress={logoff} style={styles.logout} name='logout' />
@@ -47,11 +74,27 @@ export default function Index({navigation}) {
         </View>
       </View>
       <View>
-        <Text>Content</Text>
-      </View>
+        <FlatList 
+           style={styles.listItens}
+           data = {materias}
+           keyExtractor = {item => item._id}
+           renderItem = {
+             ({item}) => (
+               <ListItem
+                 data = {item}
+                 handleLeft = {()=>{ notas(item._id) }}
+                 handleRight = {()=>{ faltas(item._id) }}
+               />
+             )
+           }
+           ItemSeparatorComponent = {() => <Separator/>}
+        />
+        </View>
     </View>
   );
 }
+
+const Separator = () => <View style={{flex: 1, height: 2, backgroundColor:'#ddd', }}></View>
 
 const styles = StyleSheet.create({
   container: {
@@ -62,14 +105,16 @@ const styles = StyleSheet.create({
     marginTop: 30,
     flexDirection: "row",
     paddingVertical: 10,
-    width: "100%"
+    marginLeft: 10,
+    width: "100%",
+    alignItems: "center"
   },
-  Name: {
+  name: {
     fontSize: 20,
     flexDirection: "row"
   },
   text: {
-    fontSize:10,
+    fontSize: 12,
     color: "#000"
   },
   areaLogout: {
@@ -84,6 +129,10 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    marginLeft: 20
+  },
+  listItens: {
+    marginTop: 20
   }
 });

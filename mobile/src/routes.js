@@ -6,16 +6,20 @@ import Especialidades from './pages/Especialidades';
 import Medicos from './pages/Medicos';
 import Clinicas from './pages/Clinicas';
 import Usuario from './pages/Usuario'
+import Notas from './pages/Notas'
+import Faltas from './pages/Faltas'
 
 
 const Routes = createAppContainer(
     createSwitchNavigator({
         Index,
         Login,
-        Especialidades,
         Medicos,
+        Usuario,
         Clinicas,
-        Usuario
+        Especialidades,
+        Notas,
+        Faltas
     })
 )
 

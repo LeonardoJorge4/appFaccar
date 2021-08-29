@@ -3,15 +3,15 @@ const mongoose = require('mongoose');
 const MedicoClinicaSchema = new mongoose.Schema({
     Medico : {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Medico'
+        ref: 'medicos'
     },
     Clinica : {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Clinica'
+        ref: 'clinicas'
     },
     Especialidade : {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Especialidade'
+        ref: 'especialidades'
     },
     criado_em : Number,
     atualizado_em : Number,

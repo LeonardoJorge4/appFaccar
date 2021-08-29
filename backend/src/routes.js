@@ -4,6 +4,10 @@ const MedicoController = require('../controller/Medico');
 const ClinicaController = require('../controller/Clinica');
 const EspecialidadeController = require('../controller/Especialidade');
 const MedicoClinicaController = require('../controller/MedicoClinica');
+const MateriaController = require('../controller/Materia');
+const NotaController = require('../controller/Nota');
+const FaltaController = require('../controller/Falta');
+
 const routes = express.Router();
 
 //GET => Usado somente para buscar informação (no maximo, mandar alguma query) - read
@@ -41,5 +45,22 @@ routes.get('/medico-clinica', MedicoClinicaController.index);
 routes.post('/medico-clinica', MedicoClinicaController.store);
 routes.put('/medico-clinica', MedicoClinicaController.update);
 routes.delete('/medico-clinica', MedicoClinicaController.delete);
+
+routes.get('/materia', MateriaController.index);
+routes.post('/materia', MateriaController.store);
+routes.put('/materia', MateriaController.update);
+routes.delete('/materia', MateriaController.delete);
+
+routes.get('/nota', NotaController.index);
+routes.post('/nota', NotaController.store);
+routes.put('/nota', NotaController.update);
+routes.delete('/nota', NotaController.delete);
+routes.post('/nota/aluno', NotaController.materiaHasNota);
+
+routes.get('/falta', FaltaController.index);
+routes.post('/falta', FaltaController.store);
+routes.put('/falta', FaltaController.update);
+routes.delete('/falta', FaltaController.delete);
+routes.post('/falta/aluno', FaltaController.materiaHasFalta);
 
 module.exports = routes;
