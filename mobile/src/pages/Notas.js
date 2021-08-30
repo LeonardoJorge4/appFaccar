@@ -1,89 +1,90 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react'
-import { View, Image, Text, StyleSheet, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import api from '../service/api';
-import avatar from "../../assets/avatar.jpeg";
 
-export default function MateriaNotas({ route, navigation }) {
+export default function Notas({navigation, route}) {
+  
+  const materia = route.params;
+  const [user, setUser] = useState('');
+  const [notas, setNotas] = useState('');
 
-    const [user, setUser] = useState('');
-    const materia = route.params;
-    const [notas, setNotas] = useState();
-
-    async function listaNotas() {
-      const notas = await api.get('/nota-materia',{
-        params: {
-          Materia: materia.materia,
-          User: user._id
-        }
-      });
-      console.log(notas.data)
-      if(notas.status == 200) {
-        setNotas(notas.data);
-      } else {
-        let msgError = response.data;
-        console.log(msgError.mensagem);
-      }
+  async function getData() {
+    const notas = await api.get('/nota');
+    if (notas.status === 200) {
+      setNotas(notas.data);
+    } else {
+      setNotas(notas.data);
+      alert(notas.data.message); 
     }
+  }
 
-    useEffect(() => {
-      if(!notas) {
-        listaNotas()
+  useEffect(() => {
+    if (!notas) {
+      getData();
+    }
+    AsyncStorage.getItem('@user').then(user => {
+      if (!user) {
+        navigation.navigate('Login');
+      } else {
+        setUser(JSON.parse(user));
       }
-      AsyncStorage.getItem('@user').then(user => {
-        if(!user){
-          navigation.navigate('Login');
-        }else {
-          setUser(JSON.parse(user))
-        }
-      })
-    })
+    });
+  });
 
-    const renderItem = ({ item }) => (
-      <Text>{item.bimestre}°bi - {item.pontuacao}</Text>
-    );
-
-    return (
-      <View style={styles.container}>
-        <View>
-          <Image source={avatar} style={[styles.avatar]}></Image>
-        </View>
-        <View>
-          <Text style={styles.title}>NOTAS</Text>
-        </View>
-        <View>
-          <FlatList
-            data={notas}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-          />
-        </View>
+  return (
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Text style={styles.title}>NOTAS</Text>
       </View>
-    );
+      <View>
+        <Text>
+        {
+          notas &&
+          notas.map((data) => {
+            if (data.subject === materia.materia) {
+              return <Text key={data._id}>{data.period} - {data.result}</Text>
+            }
+          })
+        }
+        </Text>
+      </View>
+    </SafeAreaView>  
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        marginTop: 30
-    },
-    avatar: {
-        width: 150,
-        height: 150,
-        borderRadius: 75,
-        marginHorizontal: 10,
-        marginVertical: 30
-    },
-    title: {
-        fontSize: 25
-    },
-    item: {
-        backgroundColor: '#f9c2ff',
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
-      },
+  container: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  title: {
+    marginTop: 60,
+    marginBottom: 10,
+    fontSize: 30,
+    flexDirection: 'row' 
+  }, 
+  grades: {
+    fontSize: 20,
+    color: '#000'
+  },
+  form: {
+    alignSelf: 'stretch',
+    paddingHorizontal: 20,
+    marginTop: 0
+  },
+  backButton: {
+    backgroundColor: 'transparent',
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: '#05509b',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    marginBottom: 15
+  },
+  textBackButton: {
+    fontSize: 20,
+    textAlign: 'center',
+    color: '#05509b'
+  }
 });

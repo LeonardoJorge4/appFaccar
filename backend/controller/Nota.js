@@ -36,7 +36,7 @@ module.exports = {
     var user = req.body.user;
     let nota = await Nota.find({user: user, subject: subject}); 
     if (nota.length === 0) {
-      return res.status(203).json({message: 'Esta matéria não possuí notas registradas!'}); 
+      return res.status(203).json({ message: 'Esta matéria não possuí notas registradas!' }); 
     } else {
       return res.status(200).json(nota);
     }

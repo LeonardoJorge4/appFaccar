@@ -37,13 +37,13 @@ export default function Index({ navigation }) {
   })
 
   function notas(materiaid) {
-    navigation.navigate('MateriaNotas', {
+    navigation.navigate('Notas', {
       materia: materiaid
     });
   }
 
   function faltas(materiaid) {
-    navigation.navigate('MateriaFaltas', {
+    navigation.navigate('Faltas', {
       materia: materiaid
     });
   }
@@ -73,21 +73,21 @@ export default function Index({ navigation }) {
           <Icon onPress={settings} style={styles.config} name='cog' type='font-awesome' />  
         </View>
       </View>
-      <View>
+      <View style={styles.list}>
         <FlatList 
-           style={styles.listItens}
-           data = {materias}
-           keyExtractor = {item => item._id}
-           renderItem = {
-             ({item}) => (
-               <ListItem
-                 data = {item}
-                 handleLeft = {()=>{ notas(item._id) }}
-                 handleRight = {()=>{ faltas(item._id) }}
-               />
-             )
-           }
-           ItemSeparatorComponent = {() => <Separator/>}
+          style={styles.listItens}
+          data = {materias}
+          keyExtractor = {item => item._id}
+          renderItem = {
+            ({item}) => (
+              <ListItem
+                data = {item}
+                handleLeft = { () => { notas(item._id) }}
+                handleRight = { () => { faltas(item._id) }}
+              />
+            )
+          }
+          ItemSeparatorComponent = {() => <Separator/>}
         />
         </View>
     </View>
@@ -134,5 +134,8 @@ const styles = StyleSheet.create({
   },
   listItens: {
     marginTop: 20
+  },
+  list: {
+    width: '100%',
   }
 });

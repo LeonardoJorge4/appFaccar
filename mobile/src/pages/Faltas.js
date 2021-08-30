@@ -1,85 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { useEffect, useState } from 'react'
+import { View, Text, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import 'react-native-gesture-handler';
+
 import api from '../service/api';
 
-export default function Faltas({navigation, route}) {
+export default function Faltas({ navigation, route }) {
   
-  const {user_id, subject_id} = route.params;
   const [user, setUser] = useState('');
-  const [faltas, setFaltas] = useState('');
-  var array_faltas = [];
+    const materia = route.params;
+    const [faltas, setFaltas] = useState();
 
-  useEffect(() => {
-    AsyncStorage.getItem('@user').then(user => {
-      let mounted = true;
-      if (!user) {
-        navigation.navigate('Login');
-        return function cleanup() {
-          mounted = false;
+    async function listaFaltas() {
+      const faltas = await api.get('/falta',{
+        params: {
+          Materia: materia.materia,
+          User: user._id
         }
+      });
+      if(faltas.status == 200) {
+        setFaltas(faltas.data);
       } else {
-        setUser(JSON.parse(user));
+        let msgError = response.data;
+        console.log(msgError.mensagem);
       }
-    });
-    if (!faltas) {
-      getMisses();
-    }
-  });
+    } 
 
-  async function getMisses() {
-    const faltas = await api.post('/falta/aluno', {
-      user: user_id,
-      subject: subject_id
-    });
-    if (faltas.status === 200) {
-      setFaltas(faltas.data);
-    } else {
-      setFaltas(faltas.data);
-      alert(faltas.data.message); 
-    }
-
-  }
-
-  dataFormat();
-
-  function dataFormat() {
-    for (let i = 0; i< faltas.length; i++) {
-      let x;
-      if (faltas[i].quantity < 10) {
-        x = 0;
-      } else {
-        x = '';
+    useEffect(() => {
+      if(!faltas) {
+        listaFaltas()
       }
-      array_faltas.push(faltas[i].period + ': ' + x + faltas[i].quantity + ' \n');
-    }
-  }
+      AsyncStorage.getItem('@user').then(user => {
+        if(!user){
+            navigation.navigate('Login');
+        } else {
+          setUser(JSON.parse(user))
+        }
+      }) 
+    })
 
-  function goBack() {
-    navigation.navigate('Index');
-  }
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.title}>
-          Faltas
-        </Text>
+    return (
+      <View style={styles.container}>
+        <View>
+          <Text style={styles.title}>FALTAS</Text>
+        </View>
+        <View>
+          {
+            faltas &&
+            faltas.map((data) => {
+              if (data.materias === materia.materia) {
+                return <Text key={data._id}>{data.period} - {data.result}</Text>
+              }
+            })
+          }
+        </View>
       </View>
-      <View>
-        <Text style={styles.grades}> 
-          {array_faltas}
-        </Text>
-      </View>
-      <View style={styles.form}>
-        <TouchableOpacity onPress={goBack} style={styles.backButton}>
-          <Text style={styles.textBackButton}>
-              Voltar
-          </Text>
-        </TouchableOpacity>
-      </View>  
-    </SafeAreaView>  
-  );
+    );
 }
 
 const styles = StyleSheet.create({

@@ -3,7 +3,6 @@ const User = require('../model/User');
 module.exports = {
     async index(req, res){ // busca todos os registros
         let users = await User.find()
-        console.log(users)
         return res.json(users)
     },
 
@@ -33,11 +32,7 @@ module.exports = {
 
     async validation(req, res){ // busca todos os registros
         const {ra, pwd} = req.body;
-        //let user = await User.findOne({ra : ra, pwd : pwd});
-        let user = {
-            ra: 2019073849,
-            pwd: '09102000',
-        }
+        let user = await User.findOne({ra : ra, pwd : pwd});
         if(user === null) {
             return res.status(203).json({ mensagem : "RA não encontrado" });
         } else {
