@@ -10,6 +10,7 @@ import Faltas from './src/pages/Faltas';
 import Login from './src/pages/Login';
 import Usuario from './src/pages/Usuario';
 import Index from './src/pages/Index';
+import Protocolos from './src/pages/Protocolos';
 
 export default function App(){
   return (
@@ -21,6 +22,7 @@ export default function App(){
         <Stack.Screen name="Faltas" component={Faltas} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
         <Stack.Screen name="Usuario" component={Usuario} />
+        <Stack.Screen name="Protocolos" component={Protocolos} />
       </Stack.Navigator>
     </NavigationContainer>
   )

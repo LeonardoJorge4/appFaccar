@@ -8,6 +8,7 @@ import Clinicas from './pages/Clinicas';
 import Usuario from './pages/Usuario'
 import Notas from './pages/Notas'
 import Faltas from './pages/Faltas'
+import Protocolos from './pages/Protocolos'
 
 
 const Routes = createAppContainer(
@@ -19,7 +20,8 @@ const Routes = createAppContainer(
         Clinicas,
         Especialidades,
         Notas,
-        Faltas
+        Faltas,
+        Protocolos
     })
 )
 

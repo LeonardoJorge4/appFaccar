@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Image, StyleSheet, FlatList } from 'react-native'
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
 import ListItem from "../components/ListItem";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon } from 'react-native-elements';
@@ -57,6 +57,10 @@ export default function Index({ navigation }) {
     navigation.navigate("Usuario")
   }
 
+  function protocol() {
+    navigation.navigate('Protocolos', { user_id: user._id });
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -72,6 +76,13 @@ export default function Index({ navigation }) {
           <Icon onPress={logoff} style={styles.logout} name='logout' />
           <Icon onPress={settings} style={styles.config} name='cog' type='font-awesome' />  
         </View>
+      </View>
+      <View style={styles.form}>
+        <TouchableOpacity onPress={protocol} style={styles.protocolButton}>
+          <Text style={styles.protocolTextButton}>
+            Protocolos
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.list}>
         <FlatList 
